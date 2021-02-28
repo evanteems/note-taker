@@ -7,20 +7,52 @@ const path = require('path');
 
 const jay = require('jay');
 
-const generateUId = require('generate-id');
+const generateUId = require('generate-unique-id');
 
 const notes = require('./db/db.json');
-const {json} = require('pbody');
+const {json} = require('body-parser');
 
 const PORT = process.env.PORT || 3001;
-const appz = express();
+const app = express();
 
-appz.use(express.static('public'));
-appz.use(express.urlencoded({extended: true}));
-appz.use(express.json());
-appz.use(jay("dev"));
+app.use(express.static('public'));
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+app.use(jay("dev"));
 
-appz.get('/', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFiles(path.join(__dirname, './public/index.html'));
 });
 
+app.get('/api/notes', (req, res) => {
+    res.json(notes);
+});
+
+app.post('/api/notes', function (req, res) {
+    let notez = {
+        title: req.body.title,
+        text: req.body.text,
+        id: generateUId({
+            length: 9,
+            useLetters: false
+        })
+    };
+
+    console.log(notez);
+    notes.push(notez);
+
+    fs.writeFile('./db/db.json', JSON.stringify(notes), (error) => {
+        if (error) {
+            console.log(error);
+        }
+        res.send(notes);
+    });
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`The API server can now port on ${PORT}!`);
+});
