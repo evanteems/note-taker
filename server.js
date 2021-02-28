@@ -29,7 +29,7 @@ app.get('/api/notes', (req, res) => {
 });
 
 app.post('/api/notes', function (req, res) {
-    let notez = {
+    let note = {
         title: req.body.title,
         text: req.body.text,
         id: generateUId({
@@ -38,8 +38,8 @@ app.post('/api/notes', function (req, res) {
         })
     };
 
-    console.log(notez);
-    notes.push(notez);
+    console.log(note);
+    notes.push(note);
 
     fs.writeFile('./db/db.json', JSON.stringify(notes), (error) => {
         if (error) {
