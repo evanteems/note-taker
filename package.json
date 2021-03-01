@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "generate-unique-id": "^2.0.1",
     "inquirer": "^8.0.0",
-    "jay": "0.0.8"
+    "jay": "0.0.8",
+    "morgan": "^1.10.0"
   }
 }

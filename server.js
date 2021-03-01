@@ -5,7 +5,7 @@ const express = require('express');
 
 const path = require('path');
 
-//const jay = require('jay');
+const morgan = require('morgan');
 
 const genereateUniqueId = require('generate-unique-id');
 
@@ -19,7 +19,7 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-//app.use(jay("dev"));
+app.use(morgan("dev"));
 
 app.get('/', (req, res) => {
     res.sendFiles(path.join(__dirname, './public/index.html'));
