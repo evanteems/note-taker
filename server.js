@@ -53,6 +53,33 @@ app.post('/api/notes', function (req, res) {
         res.send(jsonNotes);
     });
 });
+//Delete Function!!!
+app.delete('api/notes/:id', (req, res) => {
+    const IdDelete = req.params.id;
+    let notesArr = [];
+
+    fs.readFile(path.join(__dirname + '/' + jsonNotes), 'utf8', (err, notesData) => {
+        if (err) {
+            return console.log(err);
+        };
+
+        notesArr = JSON.parse(notesData);
+
+        notesArr = notesArr.filter((object) => {
+            return object.id != IdDelete;
+        });
+
+        for (let i = 1; i < notesArr.length; i++) {
+            notesArr[1].id = i;
+        };
+
+        fs.writeFile((path.join(__dirname + '/' + jsonNotes)), JSOPN.stringify(notesArr), (error) => {
+            if (error) {return console.log(error);};
+
+            res.json(notesArr);
+        });
+    });
+});
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, './public/index.html'));
